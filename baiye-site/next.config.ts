@@ -8,8 +8,6 @@ const nextConfig: NextConfig = {
         hostname: "**",
       },
     ],
-    // 本地上传图片不需要优化处理
-    unoptimized: undefined,
   },
 
   async headers() {
