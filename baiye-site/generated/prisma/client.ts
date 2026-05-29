@@ -31,8 +31,8 @@ export * from "./enums"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Admins
- * const admins = await prisma.admin.findMany()
+ * // Fetch zero or more Members
+ * const members = await prisma.member.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -42,17 +42,7 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
- * Model Admin
- * 
- */
-export type Admin = Prisma.AdminModel
-/**
  * Model Member
  * 
  */
 export type Member = Prisma.MemberModel
-/**
- * Model Application
- * 
- */
-export type Application = Prisma.ApplicationModel

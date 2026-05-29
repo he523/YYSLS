@@ -7,25 +7,17 @@ datasource db {
   provider = "postgresql"
 }
 
-model Admin {
-  id           String   @id @default(cuid())
-  username     String   @unique
-  passwordHash String   @map("password_hash")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-
-  @@map("admins")
-}
 
 model Member {
   id         String   @id @default(cuid())
   nickname   String
   avatar     String?
-  role       String   @default("成员") // 会长, 副会长, 精英, 成员
-  profession String?  // 侠客, 商人, 医生, 盗贼 等
+  role       String   @default("小猫咪") // 猫老大, 大猫, 橘猫, 小猫咪
+  profession String?  // 铲屎官, 猫粮官, 摄影师, 云吸猫 等
   level      Int      @default(1)
-  power      Int      @default(0) // 战力
+  power      Int      @default(0) // 喵力值
   intro      String?  // 个人简介
+  gameImage  String?  @map("game_image") // 少冬瓜角色图片
   isPublic   Boolean  @default(true) @map("is_public")
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
@@ -33,16 +25,4 @@ model Member {
   @@map("members")
 }
 
-model Application {
-  id            String    @id @default(cuid())
-  applicantName String    @map("applicant_name")
-  contactInfo   String    @map("contact_info") // 联系方式
-  reason        String    // 申请理由
-  status        String    @default("pending") // pending, approved, rejected
-  reviewedAt    DateTime? @map("reviewed_at")
-  reviewedBy    String?   @map("reviewed_by")
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
 
-  @@map("applications")
-}

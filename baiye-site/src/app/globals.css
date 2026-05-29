@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* ============================================
+   小猫来信 · 暗色猫咪主题
+   暖橘 + 奶油 + 柔粉 = 温暖猫咪风格
+   ============================================ */
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -44,124 +49,192 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* ============================================
+   默认主题 = 暗色猫咪
+   ============================================ */
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.141 0.005 285.823);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.5 0.12 30); /* warm amber for wuxia feel */
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.21 0.006 285.885);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.5 0.12 30);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-primary: oklch(0.5 0.12 30);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.5 0.12 30);
+  --radius: 0.75rem;
+
+  /* 背景层次 */
+  --background: #1a1814;
+  --foreground: #f5f0e8;
+
+  /* 卡片 */
+  --card: #24211c;
+  --card-foreground: #f5f0e8;
+
+  /* 弹出层 */
+  --popover: #24211c;
+  --popover-foreground: #f5f0e8;
+
+  /* 主色 — 暖橘（猫咪肉垫/橘猫色） */
+  --primary: #f4a460;
+  --primary-foreground: #1a1814;
+
+  /* 次要色 — 暖棕 */
+  --secondary: #3d2e2a;
+  --secondary-foreground: #f5e6d8;
+
+  /* 柔和色 */
+  --muted: #2a2520;
+  --muted-foreground: #b8a99a;
+
+  /* 强调色 — 柔粉（猫爪/信封） */
+  --accent: #ffb6c1;
+  --accent-foreground: #1a1814;
+
+  /* 破坏色 */
+  --destructive: #e05555;
+  --destructive-foreground: #f5f0e8;
+
+  /* 边框 / 输入 */
+  --border: #3a3530;
+  --input: #3a3530;
+  --ring: #f4a460;
+
+  /* 图表 */
+  --chart-1: #f4a460;
+  --chart-2: #ffb6c1;
+  --chart-3: #deb887;
+  --chart-4: #cd853f;
+  --chart-5: #ffa07a;
+
+  /* 侧边栏 */
+  --sidebar: #1e1b17;
+  --sidebar-foreground: #f5f0e8;
+  --sidebar-primary: #f4a460;
+  --sidebar-primary-foreground: #1a1814;
+  --sidebar-accent: #2a2520;
+  --sidebar-accent-foreground: #f5f0e8;
+  --sidebar-border: #3a3530;
+  --sidebar-ring: #f4a460;
 }
 
+/* ============================================
+   .dark 覆盖 — 更深邃的暗色
+   ============================================ */
 .dark {
-  --background: oklch(0.15 0.01 285);
-  --foreground: oklch(0.95 0.005 285);
-  --card: oklch(0.18 0.01 285);
-  --card-foreground: oklch(0.95 0.005 285);
-  --popover: oklch(0.18 0.01 285);
-  --popover-foreground: oklch(0.95 0.005 285);
-  --primary: oklch(0.65 0.15 35);
-  --primary-foreground: oklch(0.15 0.01 285);
-  --secondary: oklch(0.22 0.01 285);
-  --secondary-foreground: oklch(0.95 0.005 285);
-  --muted: oklch(0.22 0.01 285);
-  --muted-foreground: oklch(0.6 0.01 285);
-  --accent: oklch(0.22 0.01 285);
-  --accent-foreground: oklch(0.95 0.005 285);
-  --destructive: oklch(0.5 0.2 20);
-  --destructive-foreground: oklch(0.95 0.005 285);
-  --border: oklch(0.28 0.01 285);
-  --input: oklch(0.28 0.01 285);
-  --ring: oklch(0.65 0.15 35);
-  --sidebar: oklch(0.15 0.01 285);
-  --sidebar-foreground: oklch(0.95 0.005 285);
-  --sidebar-primary: oklch(0.65 0.15 35);
-  --sidebar-primary-foreground: oklch(0.15 0.01 285);
-  --sidebar-accent: oklch(0.22 0.01 285);
-  --sidebar-accent-foreground: oklch(0.95 0.005 285);
-  --sidebar-border: oklch(0.28 0.01 285);
-  --sidebar-ring: oklch(0.65 0.15 35);
+  --background: #141210;
+  --foreground: #f0ebe0;
+  --card: #1e1b17;
+  --card-foreground: #f0ebe0;
+  --popover: #1e1b17;
+  --popover-foreground: #f0ebe0;
+  --primary: #f8b878;
+  --primary-foreground: #141210;
+  --secondary: #352820;
+  --secondary-foreground: #f0e0d0;
+  --muted: #242018;
+  --muted-foreground: #a89888;
+  --accent: #ffc0cb;
+  --accent-foreground: #141210;
+  --destructive: #d44;
+  --destructive-foreground: #f0ebe0;
+  --border: #302c26;
+  --input: #302c26;
+  --ring: #f8b878;
+  --sidebar: #161410;
+  --sidebar-foreground: #f0ebe0;
+  --sidebar-primary: #f8b878;
+  --sidebar-primary-foreground: #141210;
+  --sidebar-accent: #242018;
+  --sidebar-accent-foreground: #f0ebe0;
+  --sidebar-border: #302c26;
+  --sidebar-ring: #f8b878;
 }
 
+/* ============================================
+   动画
+   ============================================ */
 @theme inline {
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --color-foreground: var(--foreground);
-  --color-background: var(--background);
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-fade-in: fade-in 0.5s ease-out;
+  --animate-slide-up: slide-up 0.5s ease-out;
+  --animate-float: float 3s ease-in-out infinite;
 
   @keyframes accordion-down {
-    from {
-      height: 0;
-    }
-    to {
-      height: var(--radix-accordion-content-height);
-    }
+    from { height: 0; }
+    to { height: var(--radix-accordion-content-height); }
   }
 
   @keyframes accordion-up {
-    from {
-      height: var(--radix-accordion-content-height);
-    }
-    to {
-      height: 0;
-    }
+    from { height: var(--radix-accordion-content-height); }
+    to { height: 0; }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
   }
 }
 
+/* ============================================
+   独立动画 — 通过 JS animationName 引用，
+   不依赖 Tailwind animate-* 工具类，必须
+   放在 @theme inline 外部
+   ============================================ */
+
+/* 浮动猫咪动画 — 首页 Hero */
+@keyframes float-cat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  20%       { transform: translateY(-12px) rotate(3deg); }
+  40%       { transform: translateY(-4px) rotate(-1deg); }
+  60%       { transform: translateY(-18px) rotate(2deg); }
+  80%       { transform: translateY(-8px) rotate(-2deg); }
+}
+
+/* 祝福雨变体 1 — 柔和 S 形飘落，顺时针 */
+@keyframes blessing-drift-1 {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: var(--initial-opacity, 0.85); }
+  15%  { opacity: 1; }
+  30%  { transform: translateY(30vh) translateX(var(--sway, 30px)) rotate(calc(var(--rot-deg, 120deg) * 0.35)); }
+  55%  { transform: translateY(55vh) translateX(calc(var(--sway, 30px) * -0.6)) rotate(calc(var(--rot-deg, 120deg) * 0.65)); }
+  80%  { transform: translateY(80vh) translateX(calc(var(--sway, 30px) * 0.35)) rotate(calc(var(--rot-deg, 120deg) * 0.9)); opacity: 0.7; }
+  100% { transform: translateY(calc(100vh + 5rem)) translateX(calc(var(--sway, 30px) * -0.15)) rotate(var(--rot-deg, 120deg)); opacity: 0; }
+}
+
+/* 祝福雨变体 2 — 大振幅摆动，逆时针 */
+@keyframes blessing-drift-2 {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: var(--initial-opacity, 0.85); }
+  20%  { opacity: 1; }
+  35%  { transform: translateY(35vh) translateX(calc(var(--sway, 40px) * -1)) rotate(calc(var(--rot-deg, 150deg) * -0.3)); }
+  60%  { transform: translateY(60vh) translateX(calc(var(--sway, 40px) * 0.5)) rotate(calc(var(--rot-deg, 150deg) * -0.6)); }
+  85%  { transform: translateY(85vh) translateX(calc(var(--sway, 40px) * -0.3)) rotate(calc(var(--rot-deg, 150deg) * -0.85)); opacity: 0.55; }
+  100% { transform: translateY(calc(100vh + 5rem)) translateX(calc(var(--sway, 40px) * 0.1)) rotate(calc(var(--rot-deg, 150deg) * -1)); opacity: 0; }
+}
+
+/* 祝福雨变体 3 — 先快后慢，轻微旋转 */
+@keyframes blessing-drift-3 {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: var(--initial-opacity, 0.85); }
+  10%  { opacity: 1; }
+  40%  { transform: translateY(40vh) translateX(var(--sway, 25px)) rotate(calc(var(--rot-deg, 90deg) * 0.5)); }
+  70%  { transform: translateY(70vh) translateX(calc(var(--sway, 25px) * -0.8)) rotate(calc(var(--rot-deg, 90deg) * 0.8)); opacity: 0.65; }
+  100% { transform: translateY(calc(100vh + 5rem)) translateX(calc(var(--sway, 25px) * 0.2)) rotate(var(--rot-deg, 90deg)); opacity: 0; }
+}
+
+/* 祝福雨变体 4 — 慢速大幅飘荡，像羽毛 */
+@keyframes blessing-drift-4 {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: var(--initial-opacity, 0.85); }
+  25%  { opacity: 1; transform: translateY(25vh) translateX(calc(var(--sway, 50px) * 0.7)) rotate(calc(var(--rot-deg, 180deg) * 0.25)); }
+  50%  { transform: translateY(50vh) translateX(calc(var(--sway, 50px) * -0.9)) rotate(calc(var(--rot-deg, 180deg) * 0.5)); }
+  75%  { transform: translateY(75vh) translateX(calc(var(--sway, 50px) * 0.4)) rotate(calc(var(--rot-deg, 180deg) * 0.75)); opacity: 0.6; }
+  100% { transform: translateY(calc(100vh + 5rem)) translateX(calc(var(--sway, 50px) * -0.2)) rotate(var(--rot-deg, 180deg)); opacity: 0; }
+}
+
+/* ============================================
+   基础层
+   ============================================ */
 @layer base {
   *,
   ::after,
@@ -174,8 +247,61 @@
   * {
     @apply border-border;
   }
+
+  html {
+    /* 与 Lenis 平滑滚动兼容 */
+    scroll-behavior: auto;
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  /* 滚动条美化 */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--muted-foreground);
+  }
+}
+
+/* ============================================
+   工具类
+   ============================================ */
+@utility gradient-hero {
+  background: linear-gradient(
+    135deg,
+    rgba(244, 164, 96, 0.15) 0%,
+    rgba(255, 182, 193, 0.08) 30%,
+    rgba(26, 24, 20, 0.85) 70%,
+    rgba(26, 24, 20, 0.95) 100%
+  );
+}
+
+@utility gradient-card {
+  background: linear-gradient(
+    135deg,
+    rgba(244, 164, 96, 0.08) 0%,
+    rgba(36, 33, 28, 0.95) 100%
+  );
+}
+
+@utility text-glow {
+  text-shadow: 0 0 20px rgba(244, 164, 96, 0.3),
+               0 0 40px rgba(244, 164, 96, 0.15);
 }

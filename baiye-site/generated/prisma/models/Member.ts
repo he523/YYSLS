@@ -45,6 +45,7 @@ export type MemberMinAggregateOutputType = {
   level: number | null
   power: number | null
   intro: string | null
+  gameImage: string | null
   isPublic: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -59,6 +60,7 @@ export type MemberMaxAggregateOutputType = {
   level: number | null
   power: number | null
   intro: string | null
+  gameImage: string | null
   isPublic: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -73,6 +75,7 @@ export type MemberCountAggregateOutputType = {
   level: number
   power: number
   intro: number
+  gameImage: number
   isPublic: number
   createdAt: number
   updatedAt: number
@@ -99,6 +102,7 @@ export type MemberMinAggregateInputType = {
   level?: true
   power?: true
   intro?: true
+  gameImage?: true
   isPublic?: true
   createdAt?: true
   updatedAt?: true
@@ -113,6 +117,7 @@ export type MemberMaxAggregateInputType = {
   level?: true
   power?: true
   intro?: true
+  gameImage?: true
   isPublic?: true
   createdAt?: true
   updatedAt?: true
@@ -127,6 +132,7 @@ export type MemberCountAggregateInputType = {
   level?: true
   power?: true
   intro?: true
+  gameImage?: true
   isPublic?: true
   createdAt?: true
   updatedAt?: true
@@ -228,6 +234,7 @@ export type MemberGroupByOutputType = {
   level: number
   power: number
   intro: string | null
+  gameImage: string | null
   isPublic: boolean
   createdAt: Date
   updatedAt: Date
@@ -265,6 +272,7 @@ export type MemberWhereInput = {
   level?: Prisma.IntFilter<"Member"> | number
   power?: Prisma.IntFilter<"Member"> | number
   intro?: Prisma.StringNullableFilter<"Member"> | string | null
+  gameImage?: Prisma.StringNullableFilter<"Member"> | string | null
   isPublic?: Prisma.BoolFilter<"Member"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Member"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Member"> | Date | string
@@ -279,6 +287,7 @@ export type MemberOrderByWithRelationInput = {
   level?: Prisma.SortOrder
   power?: Prisma.SortOrder
   intro?: Prisma.SortOrderInput | Prisma.SortOrder
+  gameImage?: Prisma.SortOrderInput | Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -296,6 +305,7 @@ export type MemberWhereUniqueInput = Prisma.AtLeast<{
   level?: Prisma.IntFilter<"Member"> | number
   power?: Prisma.IntFilter<"Member"> | number
   intro?: Prisma.StringNullableFilter<"Member"> | string | null
+  gameImage?: Prisma.StringNullableFilter<"Member"> | string | null
   isPublic?: Prisma.BoolFilter<"Member"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Member"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Member"> | Date | string
@@ -310,6 +320,7 @@ export type MemberOrderByWithAggregationInput = {
   level?: Prisma.SortOrder
   power?: Prisma.SortOrder
   intro?: Prisma.SortOrderInput | Prisma.SortOrder
+  gameImage?: Prisma.SortOrderInput | Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -332,6 +343,7 @@ export type MemberScalarWhereWithAggregatesInput = {
   level?: Prisma.IntWithAggregatesFilter<"Member"> | number
   power?: Prisma.IntWithAggregatesFilter<"Member"> | number
   intro?: Prisma.StringNullableWithAggregatesFilter<"Member"> | string | null
+  gameImage?: Prisma.StringNullableWithAggregatesFilter<"Member"> | string | null
   isPublic?: Prisma.BoolWithAggregatesFilter<"Member"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Member"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Member"> | Date | string
@@ -346,6 +358,7 @@ export type MemberCreateInput = {
   level?: number
   power?: number
   intro?: string | null
+  gameImage?: string | null
   isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -360,6 +373,7 @@ export type MemberUncheckedCreateInput = {
   level?: number
   power?: number
   intro?: string | null
+  gameImage?: string | null
   isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -374,6 +388,7 @@ export type MemberUpdateInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   power?: Prisma.IntFieldUpdateOperationsInput | number
   intro?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gameImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -388,6 +403,7 @@ export type MemberUncheckedUpdateInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   power?: Prisma.IntFieldUpdateOperationsInput | number
   intro?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gameImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -402,6 +418,7 @@ export type MemberCreateManyInput = {
   level?: number
   power?: number
   intro?: string | null
+  gameImage?: string | null
   isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -416,6 +433,7 @@ export type MemberUpdateManyMutationInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   power?: Prisma.IntFieldUpdateOperationsInput | number
   intro?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gameImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -430,6 +448,7 @@ export type MemberUncheckedUpdateManyInput = {
   level?: Prisma.IntFieldUpdateOperationsInput | number
   power?: Prisma.IntFieldUpdateOperationsInput | number
   intro?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gameImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -444,6 +463,7 @@ export type MemberCountOrderByAggregateInput = {
   level?: Prisma.SortOrder
   power?: Prisma.SortOrder
   intro?: Prisma.SortOrder
+  gameImage?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -463,6 +483,7 @@ export type MemberMaxOrderByAggregateInput = {
   level?: Prisma.SortOrder
   power?: Prisma.SortOrder
   intro?: Prisma.SortOrder
+  gameImage?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -477,6 +498,7 @@ export type MemberMinOrderByAggregateInput = {
   level?: Prisma.SortOrder
   power?: Prisma.SortOrder
   intro?: Prisma.SortOrder
+  gameImage?: Prisma.SortOrder
   isPublic?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -485,6 +507,10 @@ export type MemberMinOrderByAggregateInput = {
 export type MemberSumOrderByAggregateInput = {
   level?: Prisma.SortOrder
   power?: Prisma.SortOrder
+}
+
+export type StringFieldUpdateOperationsInput = {
+  set?: string
 }
 
 export type NullableStringFieldUpdateOperationsInput = {
@@ -503,6 +529,10 @@ export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
 
 
 export type MemberSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -514,6 +544,7 @@ export type MemberSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   level?: boolean
   power?: boolean
   intro?: boolean
+  gameImage?: boolean
   isPublic?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -528,6 +559,7 @@ export type MemberSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   level?: boolean
   power?: boolean
   intro?: boolean
+  gameImage?: boolean
   isPublic?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -542,6 +574,7 @@ export type MemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   level?: boolean
   power?: boolean
   intro?: boolean
+  gameImage?: boolean
   isPublic?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -556,12 +589,13 @@ export type MemberSelectScalar = {
   level?: boolean
   power?: boolean
   intro?: boolean
+  gameImage?: boolean
   isPublic?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type MemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nickname" | "avatar" | "role" | "profession" | "level" | "power" | "intro" | "isPublic" | "createdAt" | "updatedAt", ExtArgs["result"]["member"]>
+export type MemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nickname" | "avatar" | "role" | "profession" | "level" | "power" | "intro" | "gameImage" | "isPublic" | "createdAt" | "updatedAt", ExtArgs["result"]["member"]>
 
 export type $MemberPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Member"
@@ -575,6 +609,7 @@ export type $MemberPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     level: number
     power: number
     intro: string | null
+    gameImage: string | null
     isPublic: boolean
     createdAt: Date
     updatedAt: Date
@@ -1009,6 +1044,7 @@ export interface MemberFieldRefs {
   readonly level: Prisma.FieldRef<"Member", 'Int'>
   readonly power: Prisma.FieldRef<"Member", 'Int'>
   readonly intro: Prisma.FieldRef<"Member", 'String'>
+  readonly gameImage: Prisma.FieldRef<"Member", 'String'>
   readonly isPublic: Prisma.FieldRef<"Member", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Member", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Member", 'DateTime'>
