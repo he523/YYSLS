@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../baiye-site/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("admins")
+}
+
+model Member {
+  id         String   @id @default(cuid())
+  nickname   String
+  avatar     String?
+  role       String   @default("成员")
+  profession String?
+  level      Int      @default(1)
+  power      Int      @default(0)
+  intro      String?
+  isPublic   Boolean  @default(true) @map("is_public")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("members")
+}
+
+model Application {
+  id            String    @id @default(cuid())
+  applicantName String    @map("applicant_name")
+  contactInfo   String    @map("contact_info")
+  reason        String
+  status        String    @default("pending")
+  reviewedAt    DateTime? @map("reviewed_at")
+  reviewedBy    String?   @map("reviewed_by")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@map("applications")
+}
