@@ -1,0 +1,35 @@
+# Fly.io 配置文件
+# 免费额度：3 台 VM + 3GB 存储 + 160GB 出站流量
+
+app = "baiye-site"
+primary_region = "nrt"  # 东京节点，国内延迟最低 (~40ms)
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "3000"
+  DATABASE_URL = "file:./data/dev.db"
+
+[mounts]
+  source = "baiye_data"
+  destination = "/app/data"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 3000
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+  # 自动健康检查
+  [[services.http_checks]]
+    path = "/"
+    interval = "15s"
+    timeout = "5s"
+    grace_period = "20s"
