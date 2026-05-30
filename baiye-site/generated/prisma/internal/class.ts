@@ -19,8 +19,8 @@ const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
   "clientVersion": "7.8.0",
   "engineVersion": "3c6e192761c0362d496ed980de936e2f3cebcd3a",
-  "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Member {\n  id         String   @id @default(cuid())\n  nickname   String\n  avatar     String?\n  role       String   @default(\"小猫咪\") // 猫老大, 大猫, 橘猫, 小猫咪\n  profession String? // 铲屎官, 猫粮官, 摄影师, 云吸猫 等\n  level      Int      @default(1)\n  power      Int      @default(0) // 喵力值\n  intro      String? // 个人简介\n  gameImage  String?  @map(\"game_image\") // 少冬瓜角色图片\n  isPublic   Boolean  @default(true) @map(\"is_public\")\n  createdAt  DateTime @default(now()) @map(\"created_at\")\n  updatedAt  DateTime @updatedAt @map(\"updated_at\")\n\n  @@map(\"members\")\n}\n",
+  "activeProvider": "sqlite",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n}\n\nmodel Member {\n  id         String   @id @default(cuid())\n  nickname   String\n  avatar     String?\n  role       String   @default(\"小猫咪\") // 猫老大, 大猫, 橘猫, 小猫咪\n  profession String? // 铲屎官, 猫粮官, 摄影师, 云吸猫 等\n  level      Int      @default(1)\n  power      Int      @default(0) // 喵力值\n  intro      String? // 个人简介\n  gameImage  String?  @map(\"game_image\") // 少冬瓜角色图片\n  isPublic   Boolean  @default(true) @map(\"is_public\")\n  createdAt  DateTime @default(now()) @map(\"created_at\")\n  updatedAt  DateTime @updatedAt @map(\"updated_at\")\n\n  @@map(\"members\")\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -45,10 +45,10 @@ async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Modul
 }
 
 config.compilerWasm = {
-  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_fast_bg.postgresql.mjs"),
+  getRuntime: async () => await import("@prisma/client/runtime/query_compiler_fast_bg.sqlite.mjs"),
 
   getQueryCompilerWasmModule: async () => {
-    const { wasm } = await import("@prisma/client/runtime/query_compiler_fast_bg.postgresql.wasm-base64.mjs")
+    const { wasm } = await import("@prisma/client/runtime/query_compiler_fast_bg.sqlite.wasm-base64.mjs")
     return await decodeBase64AsWasm(wasm)
   },
 

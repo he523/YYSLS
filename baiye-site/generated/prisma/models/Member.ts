@@ -1258,7 +1258,6 @@ export type MemberCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * The data used to create many Members.
    */
   data: Prisma.MemberCreateManyInput | Prisma.MemberCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1277,7 +1276,6 @@ export type MemberCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many Members.
    */
   data: Prisma.MemberCreateManyInput | Prisma.MemberCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**

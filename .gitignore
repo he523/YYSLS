@@ -4,3 +4,8 @@ node_modules
 
 /generated/prisma
 .reasonix/
+
+# build outputs
+.next/
+dist-electron/
+.codegraph/

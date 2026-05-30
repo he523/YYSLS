@@ -1,0 +1,10 @@
+{
+  "build": {
+    "dockerfilePath": "baiye-site/Dockerfile"
+  },
+  "deploy": {
+    "startCommand": "",
+    "healthcheckPath": "/",
+    "healthcheckTimeout": 30
+  }
+}

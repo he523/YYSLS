@@ -6,11 +6,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -19,21 +15,12 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import Link from "next/link";
 import Image from "next/image";
 import {
   PawPrint,
   Plus,
   Trash2,
   Pencil,
-  Upload,
   Loader2,
   AlertTriangle,
 } from "lucide-react";
@@ -44,54 +31,18 @@ import {
   GAME_IMAGE_DEFAULT,
   type Member,
 } from "@/components/member-detail-dialog";
+import { ImageCropDialog } from "@/components/image-crop-dialog";
+import { TiltCard } from "@/components/tilt-card";
+import { ScrollReveal } from "@/components/scroll-reveal";
+import { MagneticButton } from "@/components/magnetic-button";
 
-// 猫咪主题角色
-const ROLES = [
-  "猫老大",
-  "大猫",
-  "橘猫",
-  "小猫咪",
-  "小奶猫",
-  "喵星人",
-  "猫护卫",
-  "猫医官",
-  "寻猫使",
-  "猫掌柜",
-] as const;
-
-// 猫咪主题标签
-const CAT_TAGS = [
-  "铲屎官",
-  "猫粮官",
-  "摄影师",
-  "云吸猫",
-  "救助者",
-  "繁育者",
-  "猫奴",
-  "野猫派",
-] as const;
-
-const AVATARS = [
-  { path: "/avatars/cat-orange.svg", label: "橘猫" },
-  { path: "/avatars/cat-black.svg", label: "黑猫" },
-  { path: "/avatars/cat-white.svg", label: "白猫" },
-  { path: "/avatars/cat-gray.svg", label: "灰猫" },
-  { path: "/avatars/cat-calico.svg", label: "三花" },
-  { path: "/avatars/cat-tabby.svg", label: "虎斑" },
-  { path: "/avatars/cat-tuxedo.svg", label: "奶牛" },
-  { path: "/avatars/cat-siamese.svg", label: "暹罗" },
-];
-
-const EMPTY_FORM = {
-  nickname: "",
-  role: "小猫咪",
-  profession: "",
-  level: 1,
-  power: 0,
-  intro: "",
-  avatar: "/avatars/cat-orange.svg",
-  gameImage: "",
-};
+import {
+  MemberFormFields,
+  ROLES,
+  CAT_TAGS,
+  AVATARS,
+  EMPTY_FORM,
+} from "@/components/member-form-fields";
 
 export default function MembersPage() {
   const [members, setMembers] = useState<Member[]>([]);
@@ -122,6 +73,11 @@ export default function MembersPage() {
   // 少冬瓜图片上传
   const gameImageInputRef = useRef<HTMLInputElement>(null);
   const [uploadingGame, setUploadingGame] = useState(false);
+
+  // 裁剪弹窗状态
+  const [cropFile, setCropFile] = useState<File | null>(null);
+  const [cropOpen, setCropOpen] = useState(false);
+  const [cropTarget, setCropTarget] = useState<"add" | "edit">("add");
 
   // 删除弹窗状态
   const [deleteTarget, setDeleteTarget] = useState<Member | null>(null);
@@ -203,16 +159,27 @@ export default function MembersPage() {
   };
 
   // ====== 少冬瓜图片上传 ======
-  const handleGameImageChange = async (
+  const handleGameImageChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // 打开裁剪弹窗
+    setCropFile(file);
+    setCropTarget(addOpen ? "add" : "edit");
+    setCropOpen(true);
+
+    // 重置 file input，允许重复选择同一文件
+    if (gameImageInputRef.current) gameImageInputRef.current.value = "";
+  };
+
+  // ====== 裁剪完成 -> 上传 ======
+  const handleCropComplete = async (croppedFile: File) => {
     setUploadingGame(true);
     try {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", croppedFile);
       formData.append("fileType", "game");
       const res = await fetch("/api/upload", {
         method: "POST",
@@ -224,9 +191,9 @@ export default function MembersPage() {
       }
       const { url } = await res.json();
 
-      if (addOpen) {
+      if (cropTarget === "add") {
         setForm((prev) => ({ ...prev, gameImage: url }));
-      } else if (editTarget) {
+      } else {
         setEditForm((prev) => ({ ...prev, gameImage: url }));
       }
 
@@ -235,7 +202,6 @@ export default function MembersPage() {
       toast.error(err instanceof Error ? err.message : "上传失败");
     } finally {
       setUploadingGame(false);
-      if (gameImageInputRef.current) gameImageInputRef.current.value = "";
     }
   };
 
@@ -376,15 +342,16 @@ export default function MembersPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="mx-auto max-w-6xl px-6 py-10 sm:py-14">
       {/* 页面标题 */}
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-10 flex items-end justify-between">
         <div>
-          <div className="flex items-center gap-2">
-            <PawPrint className="size-6 text-primary" />
-            <h1 className="text-3xl font-bold tracking-tight">猫咪成员</h1>
-          </div>
-          <p className="text-muted-foreground mt-1">
+          <span className="section-label">
+            <PawPrint className="size-3.5" />
+            成员名录
+          </span>
+          <h1 className="text-3xl font-bold tracking-tight mt-1">猫咪成员</h1>
+          <p className="body-text-sm mt-2">
             共 {total} 只猫咪
             {(filterRole || filterProfession) && (
               <span className="text-primary ml-1">
@@ -393,66 +360,58 @@ export default function MembersPage() {
             )}
           </p>
         </div>
-        <Button onClick={openAdd} className="rounded-full">
-          <Plus className="size-4" />
-          添加猫咪
-        </Button>
+        <MagneticButton>
+          <Button onClick={openAdd} className="rounded-full h-10">
+            <Plus className="size-4" />
+            添加猫咪
+          </Button>
+        </MagneticButton>
       </div>
 
       {/* 筛选栏 */}
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap items-center gap-2 mb-4">
         <Badge
           variant={filterRole === null ? "default" : "outline"}
           className="cursor-pointer hover:bg-primary/10 transition-colors"
           onClick={() => setFilterRole(null)}
         >
           全部
-          <span className="ml-1 text-[10px] opacity-70">({members.length})</span>
         </Badge>
-        {ROLES.map((role) => {
-          const count = members.filter((m) => m.role === role).length;
-          return (
-            <Badge
-              key={role}
-              variant={filterRole === role ? "default" : "outline"}
-              className="cursor-pointer hover:bg-primary/10 transition-colors"
-              onClick={() =>
-                setFilterRole((prev) => (prev === role ? null : role))
-              }
-            >
-              {role}
-              <span className="ml-1 text-[10px] opacity-70">({count})</span>
-            </Badge>
-          );
-        })}
+        {ROLES.map((role) => (
+          <Badge
+            key={role}
+            variant={filterRole === role ? "default" : "outline"}
+            className="cursor-pointer hover:bg-primary/10 transition-colors"
+            onClick={() =>
+              setFilterRole((prev) => (prev === role ? null : role))
+            }
+          >
+            {role}
+          </Badge>
+        ))}
       </div>
 
       {/* 标签筛选 */}
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap items-center gap-2 mb-8">
         <Badge
           variant={filterProfession === null ? "secondary" : "outline"}
           className="cursor-pointer hover:bg-secondary/10 transition-colors"
           onClick={() => setFilterProfession(null)}
         >
           全部标签
-          <span className="ml-1 text-[10px] opacity-70">({members.length})</span>
         </Badge>
-        {CAT_TAGS.map((tag) => {
-          const count = members.filter((m) => m.profession === tag).length;
-          return (
-            <Badge
-              key={tag}
-              variant={filterProfession === tag ? "secondary" : "outline"}
-              className="cursor-pointer hover:bg-secondary/10 transition-colors"
-              onClick={() =>
-                setFilterProfession((prev) => (prev === tag ? null : tag))
-              }
-            >
-              {tag}
-              <span className="ml-1 text-[10px] opacity-70">({count})</span>
-            </Badge>
-          );
-        })}
+        {CAT_TAGS.map((tag) => (
+          <Badge
+            key={tag}
+            variant={filterProfession === tag ? "secondary" : "outline"}
+            className="cursor-pointer hover:bg-secondary/10 transition-colors"
+            onClick={() =>
+              setFilterProfession((prev) => (prev === tag ? null : tag))
+            }
+          >
+            {tag}
+          </Badge>
+        ))}
       </div>
 
       {/* 成员列表 */}
@@ -483,9 +442,11 @@ export default function MembersPage() {
         return (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((member) => (
-            <div key={member.id} className="relative group/card">
+            <ScrollReveal key={member.id}>
+            <TiltCard maxTilt={5} gloss>
+            <div className="relative group/card">
               <div onClick={() => setSelectedMember(member)}>
-                <Card className="h-full relative overflow-hidden aspect-[3/4] border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1 cursor-pointer group">
+                <Card className="h-full relative overflow-hidden aspect-[3/4] border-white/5 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 cursor-pointer group">
                   {/* 少冬瓜背景图 */}
                   <Image
                     src={member.gameImage || GAME_IMAGE_DEFAULT}
@@ -555,6 +516,8 @@ export default function MembersPage() {
                 </Button>
               </div>
             </div>
+            </TiltCard>
+            </ScrollReveal>
           ))}
           </div>
         );
@@ -593,204 +556,14 @@ export default function MembersPage() {
               </DialogDescription>
             </DialogHeader>
 
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>昵称 *</Label>
-                <Input
-                  value={form.nickname}
-                  onChange={(e) =>
-                    setForm({ ...form, nickname: e.target.value })
-                  }
-                  placeholder="猫咪的昵称"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>职位</Label>
-                  <Select
-                    value={form.role}
-                    onValueChange={(v) =>
-                      setForm({ ...form, role: v })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {ROLES.map((r) => (
-                        <SelectItem key={r} value={r}>
-                          {r}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label>标签</Label>
-                  <Select
-                    value={form.profession}
-                    onValueChange={(v) =>
-                      setForm({ ...form, profession: v })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="选择标签" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {CAT_TAGS.map((p) => (
-                        <SelectItem key={p} value={p}>
-                          {p}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>等级</Label>
-                  <Input
-                    type="number"
-                    min={1}
-                    max={999}
-                    value={form.level}
-                    onChange={(e) =>
-                      setForm({ ...form, level: Number(e.target.value) || 1 })
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>喵力值</Label>
-                  <Input
-                    type="number"
-                    min={0}
-                    max={999999}
-                    value={form.power}
-                    onChange={(e) =>
-                      setForm({ ...form, power: Number(e.target.value) || 0 })
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label>简介</Label>
-                <Textarea
-                  value={form.intro}
-                  onChange={(e) =>
-                    setForm({ ...form, intro: e.target.value })
-                  }
-                  placeholder="一句话介绍这只猫咪~"
-                  rows={3}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>头像</Label>
-                <div className="flex flex-wrap gap-2">
-                  {AVATARS.map((a) => (
-                    <button
-                      key={a.path}
-                      type="button"
-                      className={`size-10 rounded-full overflow-hidden border-2 transition-all hover:scale-110 ${
-                        form.avatar === a.path
-                          ? "border-primary ring-2 ring-primary/30"
-                          : "border-border hover:border-primary/50"
-                      }`}
-                      onClick={() => setForm({ ...form, avatar: a.path })}
-                      title={a.label}
-                    >
-                      <img
-                        src={a.path}
-                        alt={a.label}
-                        className="size-full object-cover"
-                      />
-                    </button>
-                  ))}
-
-                  {/* 自定义头像 */}
-                  {!AVATARS.some((a) => a.path === form.avatar) && form.avatar && (
-                    <button
-                      type="button"
-                      className="size-10 rounded-full overflow-hidden border-2 transition-all hover:scale-110 border-primary ring-2 ring-primary/30"
-                      title="自定义头像"
-                    >
-                      <img
-                        src={form.avatar}
-                        alt="自定义"
-                        className="size-full object-cover"
-                      />
-                    </button>
-                  )}
-
-                  {/* 上传按钮 */}
-                  <button
-                    type="button"
-                    className="size-10 rounded-full border-2 border-dashed border-muted-foreground/40 flex items-center justify-center transition-all hover:border-primary/50 hover:bg-primary/5"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={uploading}
-                    title="上传自定义头像"
-                  >
-                    {uploading ? (
-                      <Loader2 className="size-4 animate-spin text-muted-foreground" />
-                    ) : (
-                      <Upload className="size-4 text-muted-foreground" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label>少冬瓜图片</Label>
-                <div className="flex items-center gap-3">
-                  {form.gameImage ? (
-                    <div className="relative">
-                      <img
-                        src={form.gameImage}
-                        alt="少冬瓜"
-                        className="size-16 rounded-lg object-cover border"
-                      />
-                      <button
-                        type="button"
-                        className="absolute -top-1.5 -right-1.5 size-5 rounded-full bg-destructive text-white flex items-center justify-center text-xs hover:bg-destructive/80"
-                        onClick={() =>
-                          setForm({ ...form, gameImage: "" })
-                        }
-                      >
-                        ×
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="size-16 rounded-lg border-2 border-dashed border-muted-foreground/40 flex items-center justify-center text-xs text-muted-foreground">
-                      未上传
-                    </div>
-                  )}
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => gameImageInputRef.current?.click()}
-                    disabled={uploadingGame}
-                  >
-                    {uploadingGame ? (
-                      <Loader2 className="size-4 animate-spin" />
-                    ) : (
-                      <Upload className="size-4" />
-                    )}
-                    <span className="ml-1">
-                      {form.gameImage ? "更换" : "上传"}
-                    </span>
-                  </Button>
-                  {!form.gameImage && (
-                    <span className="text-xs text-muted-foreground">
-                      默认使用通用少冬瓜形象
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
+            <MemberFormFields
+              form={form}
+              onChange={(updater) => setForm(updater)}
+              uploading={uploading}
+              uploadingGame={uploadingGame}
+              onTriggerAvatarUpload={() => fileInputRef.current?.click()}
+              onTriggerGameUpload={() => gameImageInputRef.current?.click()}
+            />
 
             <DialogFooter>
               <Button
@@ -829,206 +602,14 @@ export default function MembersPage() {
               </DialogDescription>
             </DialogHeader>
 
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>昵称 *</Label>
-                <Input
-                  value={editForm.nickname}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, nickname: e.target.value })
-                  }
-                  placeholder="猫咪的昵称"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>职位</Label>
-                  <Select
-                    value={editForm.role}
-                    onValueChange={(v) =>
-                      setEditForm({ ...editForm, role: v })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {ROLES.map((r) => (
-                        <SelectItem key={r} value={r}>
-                          {r}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label>标签</Label>
-                  <Select
-                    value={editForm.profession}
-                    onValueChange={(v) =>
-                      setEditForm({ ...editForm, profession: v })
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="选择标签" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {CAT_TAGS.map((p) => (
-                        <SelectItem key={p} value={p}>
-                          {p}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>等级</Label>
-                  <Input
-                    type="number"
-                    min={1}
-                    max={999}
-                    value={editForm.level}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, level: Number(e.target.value) || 1 })
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>喵力值</Label>
-                  <Input
-                    type="number"
-                    min={0}
-                    max={999999}
-                    value={editForm.power}
-                    onChange={(e) =>
-                      setEditForm({ ...editForm, power: Number(e.target.value) || 0 })
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label>简介</Label>
-                <Textarea
-                  value={editForm.intro}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, intro: e.target.value })
-                  }
-                  placeholder="一句话介绍这只猫咪~"
-                  rows={3}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>头像</Label>
-                <div className="flex flex-wrap gap-2">
-                  {AVATARS.map((a) => (
-                    <button
-                      key={a.path}
-                      type="button"
-                      className={`size-10 rounded-full overflow-hidden border-2 transition-all hover:scale-110 ${
-                        editForm.avatar === a.path
-                          ? "border-primary ring-2 ring-primary/30"
-                          : "border-border hover:border-primary/50"
-                      }`}
-                      onClick={() =>
-                        setEditForm({ ...editForm, avatar: a.path })
-                      }
-                      title={a.label}
-                    >
-                      <img
-                        src={a.path}
-                        alt={a.label}
-                        className="size-full object-cover"
-                      />
-                    </button>
-                  ))}
-
-                  {/* 自定义头像 */}
-                  {!AVATARS.some((a) => a.path === editForm.avatar) && editForm.avatar && (
-                    <button
-                      type="button"
-                      className="size-10 rounded-full overflow-hidden border-2 transition-all hover:scale-110 border-primary ring-2 ring-primary/30"
-                      title="自定义头像"
-                    >
-                      <img
-                        src={editForm.avatar}
-                        alt="自定义"
-                        className="size-full object-cover"
-                      />
-                    </button>
-                  )}
-
-                  {/* 上传按钮 */}
-                  <button
-                    type="button"
-                    className="size-10 rounded-full border-2 border-dashed border-muted-foreground/40 flex items-center justify-center transition-all hover:border-primary/50 hover:bg-primary/5"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={uploading}
-                    title="上传自定义头像"
-                  >
-                    {uploading ? (
-                      <Loader2 className="size-4 animate-spin text-muted-foreground" />
-                    ) : (
-                      <Upload className="size-4 text-muted-foreground" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label>少冬瓜图片</Label>
-                <div className="flex items-center gap-3">
-                  {editForm.gameImage ? (
-                    <div className="relative">
-                      <img
-                        src={editForm.gameImage}
-                        alt="少冬瓜"
-                        className="size-16 rounded-lg object-cover border"
-                      />
-                      <button
-                        type="button"
-                        className="absolute -top-1.5 -right-1.5 size-5 rounded-full bg-destructive text-white flex items-center justify-center text-xs hover:bg-destructive/80"
-                        onClick={() =>
-                          setEditForm({ ...editForm, gameImage: "" })
-                        }
-                      >
-                        ×
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="size-16 rounded-lg border-2 border-dashed border-muted-foreground/40 flex items-center justify-center text-xs text-muted-foreground">
-                      未上传
-                    </div>
-                  )}
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => gameImageInputRef.current?.click()}
-                    disabled={uploadingGame}
-                  >
-                    {uploadingGame ? (
-                      <Loader2 className="size-4 animate-spin" />
-                    ) : (
-                      <Upload className="size-4" />
-                    )}
-                    <span className="ml-1">
-                      {editForm.gameImage ? "更换" : "上传"}
-                    </span>
-                  </Button>
-                  {!editForm.gameImage && (
-                    <span className="text-xs text-muted-foreground">
-                      默认使用通用少冬瓜形象
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
+            <MemberFormFields
+              form={editForm}
+              onChange={(updater) => setEditForm(updater)}
+              uploading={uploading}
+              uploadingGame={uploadingGame}
+              onTriggerAvatarUpload={() => fileInputRef.current?.click()}
+              onTriggerGameUpload={() => gameImageInputRef.current?.click()}
+            />
 
             <DialogFooter>
               <Button
@@ -1092,6 +673,17 @@ export default function MembersPage() {
           </DialogContent>
         </Dialog>
       )}
+
+      {/* 裁剪弹窗 */}
+      <ImageCropDialog
+        file={cropFile}
+        open={cropOpen}
+        onOpenChange={(open) => {
+          setCropOpen(open);
+          if (!open) setCropFile(null);
+        }}
+        onCropComplete={handleCropComplete}
+      />
 
       {/* 成员详情弹窗 */}
       {mounted && (

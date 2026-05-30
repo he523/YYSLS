@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  baiye-site:
+    build:
+      context: ./baiye-site
+      dockerfile: Dockerfile
+    container_name: baiye-site
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      # SQLite 数据库文件存放在挂载的 data 目录
+      - DATABASE_URL=file:./data/dev.db
+    volumes:
+      # 数据库文件持久化
+      - ./data/db:/app/data
+      # 用户上传文件持久化
+      - ./data/uploads:/app/public/uploads
+      - ./data/avatars:/app/public/avatars
+      - ./data/music:/app/public/music
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
