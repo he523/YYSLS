@@ -86,8 +86,6 @@ export function getClientIp(request: Request): string {
   if (forwarded) return forwarded.split(",")[0].trim();
   const realIp = request.headers.get("x-real-ip");
   if (realIp) return realIp.trim();
-  // 回退 — Vercel / Netlify 等平台会设置此头
-  const connectingIp = request.headers.get("x-vercel-forwarded-for")
-    || request.headers.get("x-vercel-proxy-trust");
-  return connectingIp?.trim() || "127.0.0.1";
+  // 本地 / 直连 — 无法获取真实 IP
+  return "127.0.0.1";
 }
